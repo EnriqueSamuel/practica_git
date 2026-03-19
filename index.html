@@ -1,44 +1,126 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Bienvenido - Gatitos</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>STELLAR WARP</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-<header>
-    <h1>🐾 Bienvenido al Mundo de los Gatitos 🐾</h1>
-    <p>Un lugar lleno de ternura y pelitos</p>
-</header>
-
-<section class="contenedor-gatos">
-
-    <div class="card">
-        <img src="https://cdn2.thecatapi.com/images/MTY3ODIyMQ.jpg">
-        <h3>Gatito Dormilón</h3>
-        <p>Le encanta dormir todo el día.</p>
+<!-- ══ START ══ -->
+<div id="s-start" class="screen active">
+  <div class="scanline"></div>
+  <div class="start-wrap">
+    <div class="logo-sub">— ARCADE —</div>
+    <h1 class="logo-title">STELLAR<br><span>WARP</span></h1>
+    <div class="logo-sub">◆ PIXEL EDITION ◆</div>
+    <div class="ship-prev">🚀</div>
+    <div class="ctrl-box">
+      <div class="ctrl-row"><kbd>WASD</kbd><span>o</span><kbd>↑←↓→</kbd>— Mover</div>
+      <div class="ctrl-row"><kbd>SPACE</kbd>— Disparar &nbsp;|&nbsp; <kbd>Z</kbd>— Especial &nbsp;|&nbsp; <kbd>P</kbd>— Pausa</div>
     </div>
-
-    <div class="card">
-        <img src="https://cdn2.thecatapi.com/images/bpc.jpg">
-        <h3>Gatito Curioso</h3>
-        <p>Siempre explorando todo.</p>
+    <button class="btn-main" id="btn-start">▶ INICIAR JUEGO</button>
+    <button class="btn-ghost" id="btn-scores">🏆 HIGH SCORES</button>
+    <div class="hs-mini">
+      <div class="hs-sub">— TOP SCORES —</div>
+      <div id="hs-start"></div>
     </div>
+    <div class="blink">INSERT COIN</div>
+  </div>
+</div>
 
-    <div class="card">
-        <img src="https://cdn2.thecatapi.com/images/9j5.jpg">
-        <h3>Gatito Travieso</h3>
-        <p>Le gusta jugar con todo.</p>
+<!-- ══ GAME ══ -->
+<div id="s-game" class="screen">
+  <canvas id="gameCanvas"></canvas>
+  <div id="hud">
+    <div id="hud-left"><div class="lbl">VIDAS</div><div id="hud-lives">❤️❤️❤️</div></div>
+    <div id="hud-center">
+      <div class="lbl">PUNTOS</div><div id="hud-score">000000</div>
+      <div class="lbl" style="margin-top:3px">NIVEL</div><div id="hud-wave">1</div>
     </div>
+    <div id="hud-right">
+      <div class="lbl">POWER-UPS</div>
+      <div id="hud-pu">
+        <span class="pu" id="pu-sp">—</span>
+        <span class="pu" id="pu-fi">—</span>
+        <span class="pu" id="pu-sh">—</span>
+      </div>
+    </div>
+  </div>
+  <div id="boss-bar" class="hidden">
+    <div class="lbl" style="text-align:center">⚠ BOSS ⚠</div>
+    <div id="boss-track"><div id="boss-fill"></div></div>
+    <div id="boss-name">OMEGA TITAN</div>
+  </div>
+  <div id="wave-msg" class="hidden"></div>
+  <div id="pause-ov" class="hidden">
+    <div class="pause-box">
+      <div class="pause-ttl">⏸ PAUSA</div>
+      <button class="btn-main" id="btn-resume">▶ CONTINUAR</button>
+    </div>
+  </div>
+</div>
 
-</section>
+<!-- ══ NAME ENTRY ══ -->
+<div id="s-name" class="screen" data-win="0">
+  <div class="scanline"></div>
+  <div class="ne-wrap">
+    <div class="ne-crown">🏆</div>
+    <h2 class="ne-title">¡NUEVO RÉCORD!</h2>
+    <div class="lbl">TU PUNTUACIÓN</div>
+    <div class="ne-score" id="ne-sc">000000</div>
+    <div class="ne-lbl">INGRESA TU NOMBRE, PILOTO</div>
+    <input id="ne-input" type="text" maxlength="12" placeholder="NOMBRE..." autocomplete="off" spellcheck="false"/>
+    <button class="btn-main" id="btn-ne-ok">✔ GUARDAR</button>
+    <div class="ne-hint">Máx. 12 letras · Enter para confirmar</div>
+  </div>
+</div>
 
-<footer>
-    <p>Hecho con ❤️ para amantes de los gatos</p>
-</footer>
+<!-- ══ SCORES ══ -->
+<div id="s-scores" class="screen">
+  <div class="scanline"></div>
+  <div class="sc-wrap">
+    <h2 class="sc-title">🏆 HIGH SCORES</h2>
+    <div class="hs-wrap" id="hs-main"></div>
+    <button class="btn-ghost" id="btn-sc-back">← VOLVER</button>
+  </div>
+</div>
+
+<!-- ══ GAME OVER ══ -->
+<div id="s-over" class="screen">
+  <div class="scanline"></div>
+  <div class="over-wrap">
+    <h2 class="over-title">GAME OVER</h2>
+    <div class="lbl">PUNTUACIÓN FINAL</div>
+    <div class="fin-score" id="fin-sc">000000</div>
+    <div class="over-msg" id="over-msg">Buen intento, piloto…</div>
+    <div class="hs-wrap"><div class="hs-sub">— TOP SCORES —</div><div id="hs-over"></div></div>
+    <div class="btn-row">
+      <button class="btn-main" id="btn-retry">↺ REINTENTAR</button>
+      <button class="btn-ghost" id="btn-menu-over">⌂ MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WIN ══ -->
+<div id="s-win" class="screen">
+  <div class="scanline"></div>
+  <div class="win-wrap">
+    <h2 class="win-title">¡VICTORIA!</h2>
+    <div class="win-stars">★★★</div>
+    <div class="lbl">PUNTUACIÓN FINAL</div>
+    <div class="fin-score gold" id="win-sc">000000</div>
+    <div class="over-msg">¡Derrotaste al OMEGA TITAN!</div>
+    <div class="hs-wrap"><div class="hs-sub">— TOP SCORES —</div><div id="hs-win"></div></div>
+    <div class="btn-row">
+      <button class="btn-main" id="btn-again">↺ JUGAR DE NUEVO</button>
+      <button class="btn-ghost" id="btn-menu-win">⌂ MENÚ</button>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
